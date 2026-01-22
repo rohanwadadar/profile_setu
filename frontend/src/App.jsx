@@ -23,21 +23,22 @@ function ScrollToTop() {
   return null;
 }
 
+
+// ORIGINAL APP COMPONENT (Commented out for refactoring/debugging)
+/*
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <ScrollToTop /> {/* 2. Added Scroll Utility */}
+        <ScrollToTop /> 
         
         <div className="flex flex-col min-h-screen bg-[#020617] text-white selection:bg-yellow-500/30">
           
-          {/* GLOBAL BACKGROUND ELEMENTS */}
           <div className="fixed inset-0 pointer-events-none z-0">
             <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full opacity-60"></div>
             <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-yellow-500/5 blur-[100px] rounded-full opacity-40"></div>
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-indigo-500/5 blur-[140px] rounded-full"></div>
             
-            {/* Technical Grid */}
             <div 
               className="absolute inset-0 opacity-[0.03]" 
               style={{
@@ -50,17 +51,14 @@ function App() {
 
           <Navbar />
 
-          {/* MAIN CONTENT - flex-grow pushes footer down */}
           <main className="flex-grow relative z-10">
             <Routes>
-              {/* Public Routes */}
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/roadmap" element={<Roadmap />} />
-              <Route path="/enterprise" element={<ForEnterprise />} /> {/* 3. Added Enterprise Route */}
+              <Route path="/enterprise" element={<ForEnterprise />} />
 
-              {/* User Protected Routes */}
               <Route
                 path="/profile"
                 element={
@@ -70,7 +68,6 @@ function App() {
                 }
               />
 
-              {/* Admin Protected Routes */}
               <Route
                 path="/admin"
                 element={
@@ -86,6 +83,18 @@ function App() {
         
         </div>
       </BrowserRouter>
+    </AuthProvider>
+  );
+}
+*/
+
+// RESTRUCTURED APP.JSX
+import MasterRoutes from "./MasterRoutes";
+
+function App() {
+  return (
+    <AuthProvider>
+      <MasterRoutes />
     </AuthProvider>
   );
 }

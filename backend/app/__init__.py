@@ -72,7 +72,7 @@ def create_app():
     app.register_blueprint(user_api)
 
     with app.app_context():
-        db.create_all()
+        db.create_all()         #auto create table 
 
     return app
 
