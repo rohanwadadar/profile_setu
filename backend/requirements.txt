@@ -3,3 +3,5 @@ flask-sqlalchemy
 flask-bcrypt
 flask-jwt-extended
 pymysql
+flask-cors
+python-dotenv

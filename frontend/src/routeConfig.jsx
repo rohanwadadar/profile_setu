@@ -6,9 +6,10 @@ import Roadmap from "./pages/Roadmap";
 import Admin from "./pages/Admin";
 import Profile from "./pages/Profile";
 import ForEnterprise from "./pages/ForEnterprise";
-
+import CourseDetail from "./pages/CourseDetail"; // Import the new page
 import About from "./pages/About";
 import Courses from "./pages/Courses";
+import WorkshopDetail from "./pages/WorkshopDetail"; // <--- ADD THIS LINE
 
 /**
  * 🔹 CENTRAL ROUTE CONFIGURATION
@@ -86,6 +87,22 @@ export const routeConfig = [
         element: <Profile />,
         protected: true,
         role: "user" // optional: specific role requirement
+    },
+    {
+        path: "/course/:courseId", // Dynamic path
+        label: "Course",
+        showInNav: false,
+        title: "SETU | Course", // Fallback title
+        description: "Explore our specialized AI and Data courses.",
+        element: <CourseDetail />,
+        protected: false
+    }, {
+        path: "/workshop/:workshopId",
+        label: "Workshop",
+        showInNav: false,
+        title: "SETU | Workshop",
+        element: <WorkshopDetail />,
+        protected: false
     },
     {
         path: "/admin",

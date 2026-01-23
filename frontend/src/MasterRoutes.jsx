@@ -1,37 +1,260 @@
+// // import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+// // import { useEffect } from "react";
+// // import Layout from "./components/Layout";
+// // import ProtectedRoute from "./auth/ProtectedRoute";
+// // import { routeConfig } from "./routeConfig.jsx";
+
+// // /**
+// //  * 🔹 PAGE MANAGER (SEO & UX)
+// //  */
+// // function PageManager() {
+// //     const { pathname } = useLocation();
+
+// //     useEffect(() => {
+// //         // 1. Find the current route data from our config
+// //         // Case-Insensitive Matching
+// //         const current = routeConfig.find((route) => {
+// //             const normalize = (p) => p.toLowerCase().replace(/\/$/, "") || "/";
+// //             return normalize(route.path) === normalize(pathname);
+// //         });
+
+// //         // 2. Dynamic Tab Title
+// //         if (current) {
+// //             document.title = current.title;
+// //         } else {
+// //             document.title = "SETU | Empowering Learners";
+// //         }
+
+// //         // 3. Dynamic Meta Description
+// //         const metaDescription = document.querySelector('meta[name="description"]');
+// //         if (metaDescription) {
+// //             metaDescription.setAttribute("content", current?.description || "SETU School of AI");
+// //         }
+
+// //         // 4. Scroll to Top
+// //         window.scrollTo(0, 0);
+
+// //     }, [pathname]);
+
+// //     return null;
+// // }
+
+// // /**
+// //  * 🔹 MAIN ROUTER COMPONENT
+// //  */
+// // export default function MasterRoutes() {
+// //     return (
+// //         <BrowserRouter>
+// //             {/* Handles titles and scrolling behind the scenes */}
+// //             <PageManager />
+
+// //             {/* Wraps every page with our Layout */}
+// //             <Layout>
+// //                 <Routes>
+// //                     {/* Automatically generate all routes from the config array */}
+// //                     {routeConfig.map((route) => {
+
+// //                         // Decide what element to render (Protected vs Public)
+// //                         let elementToRender = route.element;
+
+// //                         if (route.protected) {
+// //                             elementToRender = (
+// //                                 <ProtectedRoute role={route.role}>
+// //                                     {route.element}
+// //                                 </ProtectedRoute>
+// //                             );
+// //                         }
+
+// //                         return (
+// //                             <Route
+// //                                 key={route.path}
+// //                                 path={route.path}
+// //                                 element={elementToRender}
+// //                             />
+// //                         );
+// //                     })}
+
+// //                     {/* 404 - Page Not Found (Catch-all) */}
+// //                     <Route
+// //                         path="*"
+// //                         element={
+// //                             <div style={{ textAlign: 'center', padding: '100px 20px', minHeight: '60vh' }}>
+// //                                 <h1 className="text-4xl font-bold mb-4">404</h1>
+// //                                 <p className="text-xl">Oops! The page you are looking for doesn't exist.</p>
+// //                             </div>
+// //                         }
+// //                     />
+// //                 </Routes>
+// //             </Layout>
+// //         </BrowserRouter>
+// //     );
+// // }
+
+
+// import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+// import { useEffect } from "react";
+// import Layout from "./components/Layout";
+// import ProtectedRoute from "./auth/ProtectedRoute";
+// import { routeConfig } from "./routeConfig.jsx";
+// import { selfPacedCourses } from "./data/courses"; // 1. Import your course data
+
+// /**
+//  * 🔹 PAGE MANAGER (SEO & UX)
+//  */
+// function PageManager() {
+//     const { pathname } = useLocation();
+
+//     useEffect(() => {
+//         const normalize = (p) => p.toLowerCase().replace(/\/$/, "") || "/";
+//         const currentPath = normalize(pathname);
+
+//         // 2. Find the current route data from our config
+//         const currentRoute = routeConfig.find((route) => normalize(route.path) === currentPath);
+
+//         // 3. AUTOMATION LOGIC: Handle Dynamic Course Titles
+//         if (currentPath.startsWith("/course/")) {
+//             // Extract the ID from the URL (e.g., "llm" from "/course/llm")
+//             const courseId = currentPath.split("/")[2];
+//             const courseData = selfPacedCourses.find(c => c.id === courseId);
+
+//             if (courseData) {
+//                 document.title = `SETU | ${courseData.title}`;
+//             } else {
+//                 document.title = "SETU | Course Details";
+//             }
+//         }
+//         // 4. Standard Title Logic for static pages
+
+
+//         else if (currentRoute) {
+//             document.title = currentRoute.title;
+//         } else {
+//             document.title = "SETU | Empowering Learners";
+//         }
+
+//         // 5. Dynamic Meta Description
+//         const metaDescription = document.querySelector('meta[name="description"]');
+//         if (metaDescription) {
+//             metaDescription.setAttribute("content", currentRoute?.description || "SETU School of AI");
+//         }
+
+//         // 6. Scroll to Top
+//         window.scrollTo(0, 0);
+
+//     }, [pathname]);
+
+//     return null;
+// }
+
+// /**
+//  * 🔹 MAIN ROUTER COMPONENT
+//  */
+// export default function MasterRoutes() {
+//     return (
+//         <BrowserRouter>
+//             <PageManager />
+
+//             <Layout>
+//                 <Routes>
+//                     {routeConfig.map((route) => {
+//                         let elementToRender = route.element;
+
+//                         if (route.protected) {
+//                             elementToRender = (
+//                                 <ProtectedRoute role={route.role}>
+//                                     {route.element}
+//                                 </ProtectedRoute>
+//                             );
+//                         }
+
+//                         return (
+//                             <Route
+//                                 key={route.path}
+//                                 path={route.path}
+//                                 element={elementToRender}
+//                             />
+//                         );
+//                     })}
+
+//                     <Route
+//                         path="*"
+//                         element={
+//                             <div style={{ textAlign: 'center', padding: '100px 20px', minHeight: '60vh' }}>
+//                                 <h1 className="text-4xl font-bold mb-4">404</h1>
+//                                 <p className="text-xl">Oops! The page you are looking for doesn't exist.</p>
+//                             </div>
+//                         }
+//                     />
+//                 </Routes>
+//             </Layout>
+//         </BrowserRouter>
+//     );
+// }
+
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import { routeConfig } from "./routeConfig.jsx";
-
+import { selfPacedCourses, workshopsData } from "./data/courses"; // 1. Import both data sets
+import WorkshopDetail from "./pages/WorkshopDetail"; // <--- ADD THIS LINE
 /**
  * 🔹 PAGE MANAGER (SEO & UX)
+ * This component automatically handles Tab Titles, Meta Descriptions, and Scrolling.
  */
 function PageManager() {
     const { pathname } = useLocation();
 
     useEffect(() => {
-        // 1. Find the current route data from our config
-        // Case-Insensitive Matching
-        const current = routeConfig.find((route) => {
-            const normalize = (p) => p.toLowerCase().replace(/\/$/, "") || "/";
-            return normalize(route.path) === normalize(pathname);
-        });
+        const normalize = (p) => p.toLowerCase().replace(/\/$/, "") || "/";
+        const currentPath = normalize(pathname);
 
-        // 2. Dynamic Tab Title
-        if (current) {
-            document.title = current.title;
-        } else {
+        // 2. Find the current route data from static config
+        const currentRoute = routeConfig.find((route) => normalize(route.path) === currentPath);
+
+        // 3. AUTOMATION LOGIC: Handle Dynamic Titles
+
+        // CASE A: Self Paced Course Pages (/course/id)
+        if (currentPath.startsWith("/course/")) {
+            const courseId = currentPath.split("/")[2];
+            const courseData = selfPacedCourses.find(c => c.id === courseId);
+
+            if (courseData) {
+                document.title = `SETU | ${courseData.title}`;
+            } else {
+                document.title = "SETU | Course Details";
+            }
+        }
+
+        // CASE B: Live Workshop Pages (/workshop/id)
+        else if (currentPath.startsWith("/workshop/")) {
+            const workshopId = currentPath.split("/")[2];
+            const workshopData = workshopsData.find(w => w.id === workshopId);
+
+            if (workshopData) {
+                document.title = `SETU | Workshop: ${workshopData.title}`;
+            } else {
+                document.title = "SETU | Workshop Details";
+            }
+        }
+
+        // CASE C: Standard Static Pages (Home, About, etc.)
+        else if (currentRoute) {
+            document.title = currentRoute.title;
+        }
+
+        // FALLBACK
+        else {
             document.title = "SETU | Empowering Learners";
         }
 
-        // 3. Dynamic Meta Description
+        // 4. Dynamic Meta Description
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
-            metaDescription.setAttribute("content", current?.description || "SETU School of AI");
+            metaDescription.setAttribute("content", currentRoute?.description || "SETU School of AI");
         }
 
-        // 4. Scroll to Top
+        // 5. Scroll to Top on every route change
         window.scrollTo(0, 0);
 
     }, [pathname]);
@@ -45,18 +268,17 @@ function PageManager() {
 export default function MasterRoutes() {
     return (
         <BrowserRouter>
-            {/* Handles titles and scrolling behind the scenes */}
+            {/* PageManager runs invisibly to handle browser titles */}
             <PageManager />
 
-            {/* Wraps every page with our Layout */}
+            {/* Layout wraps all pages (Navbar, Sidebar, Footer) */}
             <Layout>
                 <Routes>
-                    {/* Automatically generate all routes from the config array */}
+                    {/* Map through routeConfig to generate all static and dynamic routes */}
                     {routeConfig.map((route) => {
-
-                        // Decide what element to render (Protected vs Public)
                         let elementToRender = route.element;
 
+                        // Wrap with ProtectedRoute if auth is required
                         if (route.protected) {
                             elementToRender = (
                                 <ProtectedRoute role={route.role}>
@@ -74,13 +296,19 @@ export default function MasterRoutes() {
                         );
                     })}
 
-                    {/* 404 - Page Not Found (Catch-all) */}
+                    {/* 404 - Page Not Found Catch-all */}
                     <Route
                         path="*"
                         element={
-                            <div style={{ textAlign: 'center', padding: '100px 20px', minHeight: '60vh' }}>
-                                <h1 className="text-4xl font-bold mb-4">404</h1>
-                                <p className="text-xl">Oops! The page you are looking for doesn't exist.</p>
+                            <div style={{ textAlign: 'center', padding: '100px 20px', minHeight: '60vh', color: 'white' }}>
+                                <h1 className="text-6xl font-black mb-4 text-[#ffcc33]">404</h1>
+                                <p className="text-xl opacity-50">Oops! The page you are looking for doesn't exist.</p>
+                                <button
+                                    onClick={() => window.location.href = "/"}
+                                    className="mt-8 px-6 py-2 bg-[#ffcc33] text-black font-bold rounded-lg"
+                                >
+                                    Go Home
+                                </button>
                             </div>
                         }
                     />
