@@ -47,7 +47,77 @@ This file does two important things:
 
 ---
 
-## 🛠️ How to Add Content (Step-by-Step)
+## � Deep Dive: How Course Details Work
+
+This section explains exactly how `Home.jsx` sends you to a course page and how `CourseDetail.jsx` knows what to show.
+
+### Step 1: The Link (Home.jsx)
+Inside `Home.jsx`, we import the list of courses. We then loop through them to create clickable cards.
+
+```javascript
+// src/pages/Home.jsx
+import { selfPacedCourses } from "../data/courses"; 
+
+// ... inside the render ...
+{selfPacedCourses.map((course) => (
+  <button 
+    key={course.id} 
+    // This creates the link! Ex: /course/llm
+    onClick={() => navigate(`/course/${course.id}`)} 
+  >
+    {course.title}
+  </button>
+))}
+```
+**Key Concept**: We use the unique `id` (like `llm`) to build the URL.
+
+### Step 2: The Route (routeConfig.jsx)
+The router needs to know that `/course/something` is a valid path. We defined this "Dynamic Route" once:
+
+```javascript
+// src/routeConfig.jsx
+{
+    path: "/course/:courseId", // The ":" means this part can change!
+    element: <CourseDetail />
+}
+```
+This tells React: *"Any URL starting with `/course/` should load the `CourseDetail` component."*
+
+### Step 3: The Display (CourseDetail.jsx)
+This is where the magic happens. When `CourseDetail` loads, it looks at the URL to figure out what to show.
+
+```javascript
+// src/pages/CourseDetail.jsx
+import { useParams } from "react-router-dom";
+import { selfPacedCourses } from "../data/courses";
+
+export default function CourseDetail() {
+    // 1. Grab the ID from the URL (e.g., "llm")
+    const { courseId } = useParams(); 
+
+    // 2. Search our "Database" for the matching course
+    const course = selfPacedCourses.find((c) => c.id === courseId);
+
+    // 3. Handle invalid IDs (Safety Check)
+    if (!course) return <div>Course Not Found</div>;
+
+    // 4. Render the data!
+    return (
+        <h1>{course.title}</h1> // Displays: "Large Language Modeling"
+    );
+}
+```
+
+### Summary of the Flow
+1.  **User Click**: User clicks "Generative BI" on Home -> Navigates to `/course/genbi`.
+2.  **Router**: Sees `/course/...` -> Loads `CourseDetail.jsx`.
+3.  **Component**: `CourseDetail` asks: "What is the ID?" -> Answer: `genbi`.
+4.  **Lookup**: It searches `data/courses.jsx` for `id: "genbi"`.
+5.  **Render**: It displays the data for Generative BI.
+
+---
+
+## �🛠️ How to Add Content (Step-by-Step)
 
 ### Scenario A: specific "Static" Page (e.g. Terms of Service)
 1.  **Create the Page**: Create `Terms.jsx` in your `pages` folder.
